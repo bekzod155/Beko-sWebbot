@@ -49,13 +49,27 @@ const App = () => {
 		telegram.MainButton.text = 'Sotib olish :)';
 		telegram.MainButton.show()
 	}
-	const onSendData =useCallback(() => {
-		telegram.sendData(JSON.stringify(cartItems))
-	},[cartItems])
-	useEffect(() => {
-		telegram.onEvent('mainButtonClicked',onSendData);
-		return () => telegram.offEvent('mainButtonClicked',onSendData);
-	},[onSendData])
+	const onSendData = useCallback(() => {
+		const queryID = telegram.initDataUnsafe?.query_id;
+
+		if (queryID) {
+			fetch(
+				'http://localhost:8080/web-data',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						products: cartItems,
+						queryID: queryID,
+					}),
+				}
+			);
+		} else {
+			telegram.sendData(JSON.stringify(cartItems));
+		}
+	}, [cartItems]);
   return (
     <>
       <h1 className='heading'>Bekzod's course</h1>
