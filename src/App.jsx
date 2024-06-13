@@ -54,7 +54,7 @@ const App = () => {
 
 		if (queryID) {
 			fetch(
-				'http://localhost:8080/web-data',
+				'https://bekoswebbot-5cf7d98f9340.herokuapp.com/web-data',
 				{
 					method: 'POST',
 					headers: {
