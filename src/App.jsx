@@ -67,9 +67,17 @@ const App = () => {
 				}
 			);
 		} else {
-			telegram.sendData(JSON.stringify({products: cartItems,queryID:queryID }));
+			telegram.sendData(JSON.stringify(cartItems));
 		}
 	}, [cartItems]);
+
+
+	useEffect(() => {
+		telegram.onEvent('mainButtonClicked', onSendData);
+
+		return () => telegram.offEvent('mainButtonClicked', onSendData);
+	}, [onSendData]);
+
   return (
     <>
       <h1 className='heading'>Bekzod's course</h1>
